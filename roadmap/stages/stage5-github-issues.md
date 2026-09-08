@@ -4,8 +4,8 @@
 **Status:** 🟡 **issue set cut; execution not started** (0 Stage 5 epic issues closed) —
 **revised 2026-09-08 (§11)** against five weeks of `v2.1.x` patch work.
 Tracking [#783](https://github.com/jepegit/cellpy/issues/783); scope decisions in §9, revision in §11.
-2.1 shipped (v2.1.0 + post1); reactive patch stream through **v2.1.3.post3** (2026-09-05),
-**v2.1.4 pending** (`v.2.1.4` milestone 14 closed / 0 open, `HISTORY.md [Unreleased]`) — see §10.
+2.1 shipped (v2.1.0 + post1); reactive patch stream closed out with **v2.1.4** (2026-09-08,
+on **`cellpycore==0.2.5`**) — patch line empty, see §10.
 
 **Created issue map (2026-07-29):** tracking **#783** · label `cellpy2-stage5` · milestone
 `v.2.2`. **L** L1–L6 → #779/#780/**#164 (L3)**/#781/#782/#778 · **S** S1–S3 → #313/#312/#359 ·
@@ -227,12 +227,12 @@ architecture dashboard. SPEED-30 and GITT/PITT open the 2.3 planning.
 | Epic / item | Status | Evidence |
 |---|---|---|
 | **L** Live / incremental (#778→#164→#782) | ⬜ not started — **prerequisites moved** (§11.1) | all open; no open PRs. `live.py` still the 10-line stub, `processor.py` still 57-line scratch; `batch_core.py` deleted (L4 lstrip item gone) |
-| **S** Step/summary science (#313/#312/#359 + **#888**) | ⬜ not started | all open; no core PRs. Core `main` is 1 fix ahead of the `0.2.4` pin (#143) — first S PR ships as `cellpycore 0.2.5` |
+| **S** Step/summary science (#313/#312/#359 + **#888**) | ⬜ not started | all open; no core PRs. Core and pin at parity: `cellpycore 0.2.5` released and pinned 2026-09-08 — first S PR opens the next core version |
 | **I** Instruments / IO (#270/#338/#306/#761 + **#827**) | ⬜ not started | all open; #938 shipped the fail-loud posture I4 needs |
 | **R** Remote / discovery (#687/#691) | 🟡 R2 half done | #900 (v2.1.3) did the project-scoped exact join + raise-on-missing; fuzzy hints remain. #687 untouched |
 | **#784** MetadataSource | ⬜ open (design ready) | on `v.2.2`; design in [`active/cellpy2-metadata-source-integration.md`](../../active/cellpy2-metadata-source-integration.md) |
 | **#352** initial OCV batch plot | ⬜ open | opportunistic add to `v.2.2` |
-| **Reactive `v2.1.x` stream** | 🟢 shipping, **heavy** | **v2.1.1.post4–post8 · v2.1.2 (+post1) · v2.1.3 (+post1–post3)**; ≈85 issues closed 2026-07-31→09-08 (`v.2.1.2` 25, `v.2.1.3` 27, `v2.1.3.post` 5, `v.2.1.4` 14 — **2.1.4 not yet tagged**) |
+| **Reactive `v2.1.x` stream** | 🟢 shipping, **heavy** | **v2.1.1.post4–post8 · v2.1.2 (+post1) · v2.1.3 (+post1–post3)**; ≈85 issues closed 2026-07-31→09-08 (`v.2.1.2` 25, `v.2.1.3` 27, `v2.1.3.post` 5, `v.2.1.4` 14) — **v2.1.4 released 2026-09-08**, all patch milestones closed |
 | Tracking #783 | open | checklist unchanged (all `[ ]`); body still shows the 2026-07-31 progress note |
 
 **Startable now** (revised, §11.4): L6 (#778), S-oracle characterization, **S4 (#888)**,
@@ -280,10 +280,10 @@ call without a batch (`c.update()` → bool changed) *before* L5.
   "pristine raw" needs to say whether the rebase is part of *ingestion* (harmonize) or the
   first *cleaning recipe step*. Recommendation: ingestion — it is a tester bookkeeping fix,
   not analysis — and record that in the curation doc.
-- **Core is one fix ahead of the pin.** `cellpy-core` `main` carries #143 (legacy
-  `cycle_mode` list unwrapping) unreleased over `v0.2.4`. The first S-epic core PR ships as
-  **`cellpycore 0.2.5`** and cellpy re-pins per `v2-cellpycore-pin-gate.md`. No S work has
-  started in core (0 open core issues).
+- **Core and pin at parity (2026-09-08).** `cellpycore 0.2.5` (core #143 legacy `cycle_mode`
+  list unwrapping) was released and cellpy re-pinned in the same day; v2.1.4 ships on it. The
+  first S-epic core PR opens the **next** core version and re-pins per
+  `v2-cellpycore-pin-gate.md`. No S work has started in core (0 open core issues).
 - **EFC** (`equivalent_full_cycles`, core #138 in 0.2.4) is already surfaced in the
   summary — an example of an additive S-style column that landed without ceremony; S1/S2
   follow the same route (one schema addition, together).
@@ -323,9 +323,10 @@ needs a plan), R1 (root-cause debugging), #784.
 
 ### 11.5 Decisions (2026-09-08, proposed for maintainer confirmation)
 
-7. **Ship `v2.1.4` before Stage 5 code starts.** 14 issues sit closed on `v.2.1.4` with an
-   `[Unreleased]` HISTORY block; tagging it flushes the patch queue so 2.2 work starts from
-   a released master. Also close the empty `v2.1.3.post` milestone.
+7. **Ship `v2.1.4` before Stage 5 code starts.** ✅ done 2026-09-08 (v2.1.4 on PyPI,
+   `v.2.1.4` + `v2.1.3.post` milestones closed; HISTORY promotion via
+   [jepegit/cellpy#1007](https://github.com/jepegit/cellpy/pull/1007)). 2.2 work starts
+   from a released master.
 8. **#827 → I5, #888 → S4** (both already on `v.2.2`; add the `cellpy2-stage5` label and
    the checklist lines on #783). **#889 (Fredrik ICA) → 2.3** with GITT/PITT (#73) — both are
    greenfield analysis routines.
@@ -338,5 +339,5 @@ needs a plan), R1 (root-cause debugging), #784.
 12. **Ecosystem:** `cellpy-mcp` is a sibling / dogfood repo alongside `cellpy-simple-gui`;
     Stage 5 L-epic surfaces are designed with both as consumers (§11.1).
 
-Housekeeping still to do on GitHub (not done by this revision): update the #783 body
-(progress note + S4/I5 checklist lines), label #827/#888 `cellpy2-stage5`, tag `v2.1.4`.
+GitHub housekeeping ✅ done 2026-09-08: #783 body carries the S4/I5 lines + progress note,
+#827/#888 labelled `cellpy2-stage5`, `v2.1.4` tagged and published, patch milestones closed.

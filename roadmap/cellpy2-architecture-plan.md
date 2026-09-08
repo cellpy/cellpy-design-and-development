@@ -3,7 +3,7 @@
 **Date:** 2026-09-08 (living document — iterate here; see iteration log at the end)
 **Day-to-day entry:** [`../CURRENT.md`](../CURRENT.md) (active stage + open plans).
 **Status:** v8 — Stages 0–4 complete; stable **v2.0.0** / **v2.1.0** shipped; patch
-stream through **v2.1.3.post3** (2026-09-05; **v2.1.4** pending). Stage 5 (**2.2**) issue
+stream closed out with **v2.1.4** (2026-09-08, `cellpycore==0.2.5`). Stage 5 (**2.2**) issue
 set cut (2026-07-29) — tracking [#783](https://github.com/jepegit/cellpy/issues/783) —
 **revised 2026-09-08** ([stage5 §11](stages/stage5-github-issues.md)) after ≈85 patch-stream
 closures; still **no Stage 5 epic issues closed**. [#164](https://github.com/jepegit/cellpy/issues/164)
@@ -27,7 +27,7 @@ register → §8 if you are a developer wanting to touch utils or loaders now.
 | Stage 2 — the flip | ✅ complete 2026-07-18 | flip Stages 0–6 merged (#511, #548–#557); `native_schema` default on; value-parity oracle real; released as **v2.0.0a5** |
 | Stage 3 — 2.0 assembly | ✅ complete 2026-07-26 | assembly issues closed (tracking [#575](https://github.com/jepegit/cellpy/issues/575) closed); scope decision (2 of 4 redesigns in 2.0) in [stage3-github-issues.md](stages/stage3-github-issues.md). Shipped: loader contract + `harmonize()` + tier-1/2 ports + tier-3 decisions (#210, #558–#561), metadata/config/units (#562–#565), ICA + plotting redesigns (#566–#567, #591), CLI/docs/packaging (#568–#573), follow-ons (#580, #594, #651, #654); **cellpycore 0.2.4** re-pin. **Released:** stable [**v2.0.0**](https://github.com/jepegit/cellpy/releases/tag/v2.0.0) (2026-07-26); release checklist [#574](https://github.com/jepegit/cellpy/issues/574) closed |
 | Stage 4 — 2.1 | ✅ **shipped** (2026-07-28) | Released [**v2.1.0**](https://github.com/jepegit/cellpy/releases/tag/v2.1.0) + docs-only [**v2.1.0.post1**](https://github.com/jepegit/cellpy/releases/tag/v2.1.0.post1); umbrella [#696](https://github.com/jepegit/cellpy/issues/696) closed. Merged: batch v3 (A) + collectors (B); utils C1 #709 (**C2 #164 → 2.2**); F6 menu (D); shim removals (E); docs (G); core doc-sync (H1); fixture gaps H2 [#655](https://github.com/jepegit/cellpy/issues/655) Phase 1. Details in [stage4-github-issues.md](stages/stage4-github-issues.md) |
-| Patch stream (`v2.1.x`) | 🟢 **active, heavy** (as planned) | [**v2.1.1**](https://github.com/jepegit/cellpy/releases/tag/v2.1.1) (+post1–post8) → [**v2.1.2**](https://github.com/jepegit/cellpy/releases/tag/v2.1.2) (+post1, 2026-08-09) → [**v2.1.3**](https://github.com/jepegit/cellpy/releases/tag/v2.1.3) (+post1–[post3](https://github.com/jepegit/cellpy/releases/tag/v2.1.3.post3), 2026-08-16 → 09-05). Milestones closed: `v.2.1.2` (25), `v.2.1.3` (27), `v2.1.3.post` (5). **`v.2.1.4`: 14 closed / 0 open — tag pending** (HISTORY `[Unreleased]`). Largely dogfood-driven (`cellpy-simple-gui`, new `cellpy-mcp` #840): batch-load orchestration + speed (#822/#825/#896), atomic writes (#845), `refresh_after` (#846), config/CLI correctness, collector polish, **capacity rebase-on-load #989 (→ Δ8)** |
+| Patch stream (`v2.1.x`) | 🟢 **active, heavy** (as planned) | [**v2.1.1**](https://github.com/jepegit/cellpy/releases/tag/v2.1.1) (+post1–post8) → [**v2.1.2**](https://github.com/jepegit/cellpy/releases/tag/v2.1.2) (+post1, 2026-08-09) → [**v2.1.3**](https://github.com/jepegit/cellpy/releases/tag/v2.1.3) (+post1–[post3](https://github.com/jepegit/cellpy/releases/tag/v2.1.3.post3), 2026-08-16 → 09-05). → [**v2.1.4**](https://github.com/jepegit/cellpy/releases/tag/v2.1.4) (2026-09-08, on **`cellpycore==0.2.5`**). Milestones closed: `v.2.1.2` (25), `v.2.1.3` (27), `v2.1.3.post` (5), `v.2.1.4` (14) — **patch line empty**. Largely dogfood-driven (`cellpy-simple-gui`, new `cellpy-mcp` #840): batch-load orchestration + speed (#822/#825/#896), atomic writes (#845), `refresh_after` (#846), config/CLI correctness, collector polish, **capacity rebase-on-load #989 (→ Δ8)** |
 | Stage 5 — 2.2 | 🟡 **issue set cut; execution not started — revised 2026-09-08** | Tracking [#783](https://github.com/jepegit/cellpy/issues/783); label `cellpy2-stage5`; milestone `v.2.2` **20 open / 0 closed**. Original epics unchecked: **L** #778/#779/#780/#164/#781/#782 · **S** #313/#312/#359 · **I** #270/#338/#306/#761 · **R** #687/#691. Milestone adds: [#784](https://github.com/jepegit/cellpy/issues/784) (metadata sources), [#352](https://github.com/jepegit/cellpy/issues/352), **[#827](https://github.com/jepegit/cellpy/issues/827) → I5** (PEC multi-cell), **[#888](https://github.com/jepegit/cellpy/issues/888) → S4** (RPT filters). Patch stream moved L's substrate (`NEWEST`/`check_file_ids`, `refresh_after`, `Batch.update()`, journal `version`), made L4's lstrip item obsolete, half-shipped R2 (#900). **Deferred → 2.3:** SPEED-30 + [#73](https://github.com/jepegit/cellpy/issues/73) GITT/PITT + [#889](https://github.com/jepegit/cellpy/issues/889) Fredrik ICA (+ [#770](https://github.com/jepegit/cellpy/issues/770)). Post-2.2 design: [#206](https://github.com/jepegit/cellpy/issues/206). Details in [stage5-github-issues.md](stages/stage5-github-issues.md) §11 · day-to-day [`../CURRENT.md`](../CURRENT.md) |
 
 **Drift check 2026-09-08 (code vs plan): no structural drift on Stages 0–4.** Stage 5
@@ -35,9 +35,9 @@ has not landed code; dashboard vs GitHub agree (all epic checkboxes open). The `
 patch stream stayed inside stage5 decision #6 *in form* (off master, nothing folded into
 2.2) but **one patch changed 1.x-visible numbers** (#989 capacity rebase) → registered as
 Δ8 below and decision #6 amended (stage5 §11.5 #11). `batch_tools/batch_core.py` deleted
-(plan text referencing it corrected). `cellpycore==0.2.4` still pinned; core `main` is
-one legacy fix (#143) ahead → next core release rides the first S-epic PR. New sibling
-repo `cellpy-mcp` (agent tools on cellpy) alongside `cellpy-simple-gui`.
+(plan text referencing it corrected). **`cellpycore==0.2.5`** released and pinned
+2026-09-08 (core #143) — core and pin at parity; the first S-epic PR opens the next core
+version. New sibling repo `cellpy-mcp` (agent tools on cellpy) alongside `cellpy-simple-gui`.
 
 ---
 
@@ -675,8 +675,8 @@ work is flip-proof:
   `v.2.1.2` still holds #345/#799/#800. Plan repo renamed to
   `cellpy-design-and-development`. Day-to-day status: [`../CURRENT.md`](../CURRENT.md).
 - **2026-09-08 (v8)** — Stage 5 **pre-execution revision** after five weeks of pure
-  patch-stream work (**v2.1.1.post4 … v2.1.3.post3**, v2.1.4 pending; ≈85 issues closed,
-  0 Stage 5). Dashboard: patch-stream row rewritten, Stage 5 row carries the two milestone
+  patch-stream work (**v2.1.1.post4 … v2.1.4**, the last tagged the same day on
+  `cellpycore==0.2.5`; ≈85 issues closed, 0 Stage 5). Dashboard: patch-stream row rewritten, Stage 5 row carries the two milestone
   adds (**#827 → I5**, **#888 → S4**) and the substrate that moved under Epic L
   (`NEWEST`/`check_file_ids`, `refresh_after`, orchestrated `Batch.update()`, journal
   `version`); L4's `batch_core.py` lstrip item marked obsolete (file deleted); R2 half
