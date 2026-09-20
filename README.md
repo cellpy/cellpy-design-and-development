@@ -1,6 +1,4 @@
-<img src="cellpy-icon-bw.svg" height="80" alt="cellpy-icon">
-
-# cellpy-design-and-development
+# <img src="cellpy-icon-bw.svg" height="40" alt="cellpy-icon"> cellpy-design-and-development
 
 Authoritative **cellpy 2 architecture and migration plans** for the
 `cellpy-workspace` multi-repo checkout.
