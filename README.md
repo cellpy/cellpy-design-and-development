@@ -1,3 +1,5 @@
+<img src="cellpy-icon-bw.svg" height="80" alt="cellpy-icon">
+
 # cellpy-design-and-development
 
 Authoritative **cellpy 2 architecture and migration plans** for the
