@@ -17,9 +17,9 @@ them has a stage:
 
 1. **The deferred structural headline** — SPEED-30 versioned headers (`v.2.3` milestone,
    stage5 §6), plus the two analysis routines parked with it (#73, #889).
-2. **Designs captured but unscheduled** — data curation & provenance (#206) and external
-   metadata sources (#784), both written to be sequenced *after Epic L*, which shipped
-   2026-09-26 (#1016, #1100–#1104).
+2. **Designs captured but unscheduled** — data curation & provenance (#206), written to be
+   sequenced *after Epic L*, which shipped 2026-09-26 (#1016, #1100–#1104); and the push half
+   of external metadata sources (#784) — its read path is pulled forward into 2.2 (§6).
 3. **cellpy 1 left-overs with no owner.** 2.1 removed the *API* shims (stage4 track E). The
    *engine/IO* left-overs were never assigned: `OldCellpyCellCore` and the
    `native_schema=False` bridge, `cellpycore.legacy.mapping` / `to_legacy`, HDF5 v4–v8
@@ -44,13 +44,14 @@ rolled into Stage 6 by default — they finish in 2.2 or are moved *explicitly* 
 | **P** Loader shell retirement: built-in loaders become plain `InstrumentLoader` classes (`can_load` / `load` → `LoaderResult` tuple); `BaseLoader` / `AutoLoader` / `TxtLoader` / `AtomicLoad` and `processors/` deleted — **cellpy-only** | | narwhals evaluation (polars plan decision 2) |
 | **A** Analysis: GITT/PITT #73 · Fredrik ICA #889 — on `cellpycore.curves` / `cellpy.ica` | | per-test `raw_units`; fsspec beyond ssh; volumetric mode |
 | **C** Data curation & provenance #206, phase 1 (recipe object, `c.clean.*`, `revert_to_original`, in-memory) — persistence rides on F's v10 | | |
-| **M** External metadata sources #784 (`MetadataSource` protocol, BatBase HTTP adapter, `CellMeta.uuid`) — *move from `v.2.2`* (§9) | | |
+| **M** External metadata sources #784 — **read path stays in 2.2** (maintainer priority 2026-09-26: try BatBase as soon as possible); Stage 6 takes only **M3** push/journal integration | | |
 | **H** Housekeeping: #770 migration-test cleanup · `DEPRECATIONS.md` removals due 2.2/2.3 · `_old_docs/` · `.cellpy_prms_*.conf` handling | | |
 
 **Cross-repo (F9):** **F** is core-first (header object + Schema indirection live in
 cellpycore; cellpy re-pins). **A** is core-first only for curve math that belongs in
-`cellpycore.curves`; the ICA/GITT front ends are cellpy. **P, C, M, H, X are cellpy-only**
-except the final `cellpycore.legacy` deletion in X.
+`cellpycore.curves`; the ICA/GITT front ends are cellpy. **P, C, H, X are cellpy-only**
+except the final `cellpycore.legacy` deletion in X. **M** spans cellpy (Protocol, resolver hook)
+and `cellpy-connectors` (client + adapter).
 
 ---
 
@@ -118,16 +119,31 @@ note: the #989 rebase-on-load is *ingestion*, so "pristine raw" = post-rebase ra
 | C2 | Persist recipe in cellpy-file | Recipe + derived cache in v10; `save(only_processed=True)`. | F3, C1 | no |
 | C3 | Batch surface | `b.clean(...)` applying one recipe across cells; report column "curated". | C1 | yes |
 
-## 6. Epic M — External metadata sources (#784)
+## 6. Epic M — External metadata sources (#784): fast path in 2.2, push in 2.3
 
 Design: [cellpy2-metadata-source-integration.md](../../active/cellpy2-metadata-source-integration.md).
-Currently milestoned `v.2.2`, but the design says 2.3+ and nothing in 2.2 depends on it.
+**Priority change (2026-09-26):** the maintainer wants to interact with BatBase as soon as
+possible, so the **read path stays in `v.2.2`** (Stage 5) and is *not* moved here. What
+makes that cheap: the prerequisites already exist —
 
-| # | Issue | Spec / goal | Depends | yolo |
-|---|---|---|---|---|
-| M1 | `MetadataSource` protocol + `MetaResolver` hook | Pull (GET) draft `CellMeta`/`TestMeta` by cell id; precedence rules in `MetaResolver`; `CellMeta.uuid`. | — | no |
-| M2 | BatBase HTTP adapter | First adapter, in `cellpy-connectors` (or `cellpy.metadata.sources`); auth via config secrets stack. | M1 | no |
-| M3 | Push (POST/PUT) + batch journal integration | Optional write-back; `batch.load(metadata_source=...)`. | M2 | no |
+- BatBase: OAuth2 client-credentials (`/o/token/`, scopes `read`/`write`/`groups`),
+  self-service API clients (`/o/applications/`, ife-bat/batbase#390 closed), project-scoped
+  row access (#391 closed), DRF endpoints incl. `/api/test-cellpy-tag/`, `/api/test-batch/`,
+  `/api/project/`, `/api/cell-*`; reference `scripts/get_bearer_token.py`,
+  `scripts/check_api_connection.py`.
+- cellpy-connectors: shared base shipped (cellpy/cellpy-connectors#3, #4): `ApiClientBase`,
+  keyring/env credential resolution, `cellpy connectors configure <name>`, CLI mount on
+  cellpy (jepegit/cellpy#1058/#1059).
+
+| # | Issue | Repo | Where | Spec / goal | Depends | yolo |
+|---|---|---|---|---|---|---|
+| M0 | `BatBaseClient` | cellpy-connectors#1 | **2.2 — first** | Client-credentials token fetch + in-memory expiry cache, one re-auth on 401, keyring/env credentials, `configure batbase`, `scope="read"` default, `BatBaseAuthError`. Plus a `get(path, **params)` passthrough and `cellpy connectors batbase get <endpoint>` so the API can be explored the same day. | — | **yes** (well specified, on the shared base) |
+| M1 | `MetadataSource` protocol + `MetaResolver` hook | cellpy (#784) | 2.2 | `fetch(key) -> MetaRecord | None`; entry-point registry `cellpy.metadata_sources`; JOURNAL/DB layer precedence; provenance names the source; null-object when unreachable; `CellMeta.uuid`. Read-only. | — | no |
+| M2 | BatBase `MetadataSource` adapter | cellpy-connectors#2 | 2.2 | Map `/api/test-cellpy-tag/` (+ batch/cell rows) → `MetaRecord`; query key decided here (cellpy tag / cell name); offline ⇒ empty layer. | M0, M1 | no |
+| M3 | Push (POST/PUT) + batch journal integration | cellpy + connectors | **2.3** | Explicit opt-in write-back with `write` scope; `batch.load(metadata_source=...)`; journal columns from the source. | M2 | no |
+
+Fastest "try it" order: **M0 → explore endpoints from the CLI → M1 ∥ M2**. M0 needs no
+cellpy release; M1 is the only cellpy-side change and is additive.
 
 Ontology mapping (BattINFO/EMMO, F10) stays parked; M1 only reserves the vocabulary hook.
 
@@ -163,7 +179,7 @@ the gate (2.4 or 3.0, §9 decision 4).
               P1 boundary ─► P2 tier-1 loaders ─► P3 tier-2/3 ─► P4 delete shell   │
                          └─► P5 third-party guide                                  │
               C1 recipe (in-memory) ─────────────────────────────────────────────────┘ ─► C3 batch
-              M1 protocol ─► M2 BatBase ─► M3 push/journal
+              (M0 → M1 ∥ M2 in 2.2)  M3 push/journal
               A1 GITT/PITT · A2 Fredrik ICA          (independent)
               H1 · H2 · H3 (anytime; H2 before A2 lands)
               X1 inventory ─► X2 legacy-files extra (needs F3) ─► [gate 2027-07-26] ─► X3 delete
@@ -175,14 +191,15 @@ Constraints:
    (harmonized raw of `load()` == today's `loader()`) guards every P2/P3 port.
 3. **C2 and X2 wait for F3** (v10). C1 and X1 do not.
 4. **P4 before X3** — the shell is what keeps pandas-shaped `Data` alive on the loader side.
-5. Startable immediately: **F1, P1, C1, M1, A1, A2, H1–H3, X1**.
+5. Startable immediately: **F1, P1, C1, A1, A2, H1–H3, X1** (M0–M2 run in Stage 5 now).
 
 **Decisions to confirm (maintainer):**
 1. **Stage 6 = cellpy 2.3** with SPEED-30 as the structural headline (carries stage5 §6
    decision 1 forward) — yes / re-scope.
 2. **Loader shell retirement (P) is in 2.3**, not deferred to the sunset: it is cellpy-only,
    unblocks third-party loaders, and is a prerequisite for X3.
-3. **#784 moves from `v.2.2` to `v.2.3`** (Epic M) — or stays and Stage 5 keeps it.
+3. **#784 read path stays in `v.2.2`** (M0–M2 now, via cellpy-connectors#1/#2 + cellpy #784);
+   only M3 (push) is Stage 6. Reflects the 2026-09-26 priority; confirm.
 4. **Sunset release**: X3 lands in **2.4** (minor, after the gate) or is the trigger for
    **3.0** (drop pandas, drop `native_schema`). Recommendation: 2.4 if pandas can stay optional
    without an API break; otherwise 3.0.
@@ -198,7 +215,7 @@ Constraints:
 | SPEED-30 | F | **In** — headline. |
 | #73 GITT/PITT, #889 Fredrik ICA, #770 | A, H | **In** — already `v.2.3`. |
 | #206 data curation | C | **In, phase 1**; persistence tied to v10. |
-| #784 metadata sources | M | **Proposed move** `v.2.2` → `v.2.3`. |
+| #784 metadata sources | M | **Read path stays 2.2** (fast path §6); push M3 in 2.3. |
 | Loader `BaseLoader` shells | P | **In** — new epic; unscheduled until now. |
 | `OldCellpyCellCore`, `legacy_read`, `to_legacy` | X | **Prepare in 2.3, delete post-gate.** |
 | narwhals / polars-native public frames | parked | Revisit with X3 (pandas optional) — not 2.3. |
@@ -210,7 +227,7 @@ Constraints:
 
 1. Maintainer confirms §9 decisions (edit this file: `Status: confirmed`).
 2. Create tracking issue "cellpy 2.3 (Stage 6) — tracking issue", label `cellpy2-stage6`,
-   milestone `v.2.3`; cut F1–F5, P1–P5, A1–A2 (existing #73/#889), C1–C3, M1–M3
+   milestone `v.2.3`; cut F1–F5, P1–P5, A1–A2 (existing #73/#889), C1–C3, M3
    (anchor #784), H1–H4 (existing #770), X1–X2 (X3 created at the gate). Record numbers in
    the "Created issue map" header of this file, mirroring stage5.
 3. Add the Stage 6 row to the architecture dashboard; move the "Deferred → 2.3" block in
