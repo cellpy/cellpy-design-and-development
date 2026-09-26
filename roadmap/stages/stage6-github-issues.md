@@ -144,9 +144,10 @@ makes that cheap: the prerequisites already exist —
 | M4 | File pointers from the source (skip `filefinder`) | cellpy jepegit/cellpy#1107 + connectors | **2.3** | `MetaRecord.files: tuple[FileRef, ...]`; `cellpy.get(source=, key=)` / `batch.from_source(...)` open the pointed-to `.cellpy` / raw files (`OtherPath`) before falling back to `filefinder`; `size`/`mtime` can short-circuit `update()`. Optional: no `files` ⇒ today's behaviour. Server side: ife-bat/batbase#474 (`TestDataFile` model + `files` on the journal API). | M2, batbase#474 | no |
 
 Status 2026-09-26: M0 shipped (cellpy-connectors#8), M1 merged (jepegit/cellpy#1106),
-M2 in review (cellpy-connectors#9). BatBase API gaps filed: ife-bat/batbase#473 (journal
-annotations `mass`/`area`/`loading`/`nom_cap`/`cell_type` + name filters), #474 (file
-pointers). `CellMeta.uuid` is core-first: cellpy/cellpy-core#151.
+M2 merged (cellpy-connectors#9) — the 2.2 read path is complete on the cellpy side.
+BatBase API: ife-bat/batbase#473 (journal annotations `mass`/`area`/`loading`/`nom_cap`/
+`cell_type` + name filters) implemented in ife-bat/batbase#475 (in review); #474 (file
+pointers) open. `CellMeta.uuid` is core-first: cellpy/cellpy-core#151.
 
 Fastest "try it" order: **M0 → explore endpoints from the CLI → M1 ∥ M2**. M0 needs no
 cellpy release; M1 is the only cellpy-side change and is additive.
