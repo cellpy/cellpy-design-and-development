@@ -67,6 +67,9 @@ Next: pick from the startable set above (L6 #778 anchors the flagship).
 SPEED-30 versioned headers · GITT/PITT [#73](https://github.com/jepegit/cellpy/issues/73) ·
 Fredrik ICA [#889](https://github.com/jepegit/cellpy/issues/889) · [#770](https://github.com/jepegit/cellpy/issues/770)
 migration-test cleanup — `v.2.3` milestone (**3 open**).
+**Stage 6 draft:** [roadmap/stages/stage6-github-issues.md](roadmap/stages/stage6-github-issues.md)
+(2026-09-26) — SPEED-30 headline, loader-shell retirement, #206 phase 1, #784, and the
+v1.x-sunset preparation (`OldCellpyCellCore`, legacy read); decisions to confirm in its §9.
 
 ---
 
