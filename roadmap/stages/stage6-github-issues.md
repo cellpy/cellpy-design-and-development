@@ -145,9 +145,13 @@ makes that cheap: the prerequisites already exist —
 
 Status 2026-09-26: M0 shipped (cellpy-connectors#8), M1 merged (jepegit/cellpy#1106),
 M2 merged (cellpy-connectors#9) — the 2.2 read path is complete on the cellpy side.
-BatBase API: ife-bat/batbase#473 (journal annotations `mass`/`area`/`loading`/`nom_cap`/
-`cell_type` + name filters) implemented in ife-bat/batbase#475 (in review); #474 (file
-pointers) open. `CellMeta.uuid` is core-first: cellpy/cellpy-core#151.
+BatBase side done: #473 (journal annotations + name filters, ife-bat/batbase#475) and
+#474 (`TestDataFile` + nested `files` + writable `/api/test-data-file/` with request-time
+`write`-scope check, ife-bat/batbase#478) both merged 2026-09-26 — M4 (#1107) is
+unblocked server-side. `CellMeta.uuid` landed in core (cellpy/cellpy-core#152; needs a
+core release + cellpy re-pin before the adapter can set it). Live round-trip verified
+against a BatBase dev server; user guide: cellpy `docs/guides/metadata_sources.md`
+(jepegit/cellpy#1108).
 
 Fastest "try it" order: **M0 → explore endpoints from the CLI → M1 ∥ M2**. M0 needs no
 cellpy release; M1 is the only cellpy-side change and is additive.
