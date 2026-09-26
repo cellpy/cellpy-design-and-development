@@ -341,3 +341,22 @@ needs a plan), R1 (root-cause debugging), #784.
 
 GitHub housekeeping ✅ done 2026-09-08: #783 body carries the S4/I5 lines + progress note,
 #827/#888 labelled `cellpy2-stage5`, `v2.1.4` tagged and published, patch milestones closed.
+
+## 12. Revision 2026-09-26 — Epic L shipped; Epic M read path pulled forward
+
+- **Epic L done** (2026-09-26): #778 (#1016), #779 (#1100), #780 (#1101), #164 (#1102),
+  #781 (#1103), #782 (#1104). `c.update()`, `live.poll()`, `Batch.refresh()/poll()` on master.
+- **Epic M (#784, external metadata sources) — read path stays in 2.2.** Maintainer
+  priority: interact with BatBase as soon as possible. Prerequisites already exist on both
+  sides (BatBase OAuth2 client-credentials + self-service API clients ife-bat/batbase#390/#391;
+  `cellpy-connectors` shared base cellpy/cellpy-connectors#3/#4). Work breakdown, mirrored in
+  [stage6 §6](stage6-github-issues.md):
+  - **M0** `BatBaseClient` + `get` passthrough + `cellpy connectors batbase get` —
+    cellpy/cellpy-connectors#1 (yolo-fit, first)
+  - **M1** `MetadataSource` Protocol + `MetaResolver` hook + `CellMeta.uuid` — jepegit/cellpy#784
+  - **M2** BatBase `MetadataSource` adapter — cellpy/cellpy-connectors#2
+  - **M3** push / journal integration → **2.3** (Stage 6).
+- Stage 6 draft cut: [stage6-github-issues.md](stage6-github-issues.md) (SPEED-30, loader-shell
+  retirement, #206 phase 1, v1.x-sunset preparation).
+- Orchestration note: every Stage 5 L issue was `yolo: no`, so `/iflow-drive` halted at #779
+  and the epic was run by hand — jepegit/issue-flow#386.
