@@ -153,6 +153,13 @@ core release + cellpy re-pin before the adapter can set it). Live round-trip ver
 against a BatBase dev server; user guide: cellpy `docs/guides/metadata_sources.md`
 (jepegit/cellpy#1108).
 
+Status 2026-10-01: **M4 cellpy side merged early** (jepegit/cellpy#1119, closes #1107):
+`MetaRecord.files` / `FileRef`, `cellpy.get(source=, key=, kind=)`, `CellpyCell.from_source`,
+`batch.from_source(source, key, kind="tag")`, `ExternalLink.files`. Split off as follow-ups:
+jepegit/cellpy#1124 (`size`/`mtime` short-circuit in `update()`) and
+cellpy/cellpy-connectors#11 (BatBase `files[]` → `FileRef` in the adapter; needs the cellpy
+pin to include #1119). M3 push remains the only open Epic M item for 2.3.
+
 Fastest "try it" order: **M0 → explore endpoints from the CLI → M1 ∥ M2**. M0 needs no
 cellpy release; M1 is the only cellpy-side change and is additive.
 
